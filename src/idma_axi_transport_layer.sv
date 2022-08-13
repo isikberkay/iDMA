@@ -207,7 +207,7 @@ module idma_axi_transport_layer #(
         // is first word: some bytes at the beginning may be invalid
         read_aligned_in_mask = first_r_q ?
             read_aligned_in_mask & r_first_mask : read_aligned_in_mask;
-        // is last word in write burst: some bytes at the end may be invalid
+        // is last word in read burst: some bytes at the end may be invalid
         if (r_dp_req_i.tailer != '0) begin
             read_aligned_in_mask = axi_rsp_i.r.last ?
                 read_aligned_in_mask & r_last_mask : read_aligned_in_mask;
