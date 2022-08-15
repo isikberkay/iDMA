@@ -7,7 +7,7 @@
 `include "common_cells/registers.svh"
 
 /// Implementing the AXI4 transport layer in the iDMA backend.
-module idma_axi_transport_layer_lite #(
+module idma_axi_lite_transport_layer #(
     /// Data width
     parameter int unsigned DataWidth = 32'd16,
     /// The depth of the internal reorder buffer:
@@ -258,15 +258,15 @@ module idma_axi_transport_layer_lite #(
 
     // r_dp_ready_o is triggered by the last element arriving from the read
     assign r_dp_ready_o = r_dp_valid_i & r_dp_ready_i &
-                          axi_rsp_i.r.last & axi_rsp_i.r_valid & in_ready;
+                          axi_rsp_i.r_valid & in_ready;
 
     // connect r_dp response payload
     assign r_dp_rsp_o.resp  = axi_rsp_i.r.resp;
-    assign r_dp_rsp_o.last  = axi_rsp_i.r.last;
+    assign r_dp_rsp_o.last  = 1'b1; /*axi_rsp_i.r.last;*/
     assign r_dp_rsp_o.first = '1;
 
     // r_dp_valid_o is triggered once the last element is here or an error occurs
-    assign r_dp_valid_o = axi_rsp_i.r_valid & in_ready & (axi_rsp_i.r.last | (|axi_rsp_i.r.resp));
+    assign r_dp_valid_o = axi_rsp_i.r_valid & in_ready & (|axi_rsp_i.r.resp);
 
 
     //--------------------------------------
@@ -357,7 +357,7 @@ module idma_axi_transport_layer_lite #(
     end
 
     // the w last signal should only be applied to the bus if an actual transfer happens
-    assign axi_req_o.w.last = ready_to_write;
+    // assign axi_req_o.w.last = ready_to_write;
 
     // we are ready for the next transfer internally, once the w last signal is applied
     assign w_dp_ready_o = write_happening;
@@ -377,7 +377,7 @@ module idma_axi_transport_layer_lite #(
     //--------------------------------------
     // connect w_dp response payload
     assign w_dp_rsp_o.resp = axi_rsp_i.b.resp;
-    assign w_dp_rsp_o.user = axi_rsp_i.b.user;
+    assign w_dp_rsp_o.user = '0; /*axi_rsp_i.b.user;*/
 
     // w_dp_valid_o is triggered once the write answer is here
     assign w_dp_valid_o = axi_rsp_i.b_valid;
@@ -391,19 +391,19 @@ module idma_axi_transport_layer_lite #(
     // Write user signals
     //--------------------------------------
     // in the default implementation: no need for the write user signals
-    assign axi_req_o.w.user = '0;
+    /*assign axi_req_o.w.user = '0;*/
 
 
     //--------------------------------------
     // Buffer
     //--------------------------------------
-    idma_buffer #(
+    idma_lite_buffer #(
         .BufferDepth   ( BufferDepth   ),
         .StrbWidth     ( StrbWidth     ),
         .PrintFifoInfo ( PrintFifoInfo ),
         .strb_t        ( strb_t        ),
         .byte_t        ( byte_t        )
-    ) i_idma_buffer (
+    ) i_idma_lite_buffer (
         .clk_i,
         .rst_ni,
         .testmode_i,
@@ -428,4 +428,4 @@ module idma_axi_transport_layer_lite #(
     // State
     //--------------------------------------
 
-endmodule : idma_axi_transport_layer
+endmodule : idma_axi_lite_transport_layer

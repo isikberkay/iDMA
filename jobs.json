@@ -79,5 +79,30 @@
         "synth_top" : "idma_nd_backend_synth",
         "overrides" : {
         }
+    },
+    "tiny-dma-lite" : {
+        "seed" : 1336,
+        "man_jobs" : {
+            "simple"       : "tiny-dma-lite/man_simple.txt"
+        },
+        "gen_jobs" : {
+        },
+        "testbench" : "tb_idma_backend_lite",
+        "synth_top" : "idma_backend_lite_synth",
+        "overrides" : {
+            "DataWidth"           : 32,
+            "AddrWidth"           : 32,
+            "UserWidth"           : 1,
+            "AxiIdWidth"          : 1,
+            "NumAxInFlight"       : 2,
+            "BufferDepth"         : 1,
+            "TFLenWidth"          : 1,
+            "MemSysDepth"         : 0,
+            "MaskInvalidData"     : 0,
+            "RAWCouplingAvail"    : 0,
+            "HardwareLegalizer"   : 0,
+            "RejectZeroTransfers" : 0,
+            "ErrorHandling"       : 0
+        }
     }
 }

@@ -27,13 +27,16 @@ sources:
   - src/idma_stream_fifo.sv
   # Level 1
   - src/idma_buffer.sv
+  - src/idma_lite_buffer.sv
   - src/idma_error_handler.sv
   - src/idma_channel_coupler.sv
   # Level 2
   - src/idma_axi_transport_layer.sv
+  - src/idma_axi_lite_transport_layer.sv
   - src/idma_legalizer.sv
   # Level 3
   - src/idma_backend.sv
+  - src/idma_backend_lite.sv
   # Level 4
   - src/legacy/axi_dma_backend.sv
 
@@ -83,6 +86,7 @@ sources:
   - target: synthesis
     files:
       - src/synth_wrapper/idma_backend_synth.sv
+      - src/synth_wrapper/idma_backend_lite_synth.sv
       - src/synth_wrapper/idma_nd_backend_synth.sv
 
   - target: test
@@ -100,6 +104,7 @@ sources:
       - test/axi_throttle.sv
       # Level 2:
       - test/tb_idma_backend.sv
+      - test/tb_idma_backend_lite.sv
       - test/tb_idma_nd_backend.sv
 
   - target: test # 64bit descriptor frontend
